@@ -1,5 +1,6 @@
 export default class Car {
   constructor(data) {
+    this._id = data._id
     this.make = data.make || "Unknown"
     this.model = data.model || "Unknown"
     this.year = data.year || "Unknown"
@@ -8,7 +9,7 @@ export default class Car {
     this.imgUrl = data.imgUrl || "Free"
   }
 
-  getTemplate(index) {
+  get Template() {
     return `
             <div class="col-3 m-3 p-2 border rounded bg-dark">
                 <h2>${this.make}</h2>
@@ -17,7 +18,8 @@ export default class Car {
                 <h5>${this.price}</h5>
                 <h5>${this.description}</h5>
                 <img src="${this.imgUrl}" height="200">
-                <button class="btn btn-danger btn-block" onclick="app.carsController.delortCar(${index})">Delort</button>
+                <button type="button" class="btn btn-danger btn-block" onclick="app.carsController.delortCar('${this._id}')">Delort</button>
+                <button type="button" class="btn btn-success" onclick="app.carsController.bid('${this._id}', '${this.price}')">Bid</button>
             </div>
     `
   }

@@ -7,7 +7,7 @@ import _store from '../store.js'
 function _drawCars() {
   let template = ''
   let cars = _store.State.cars
-  cars.forEach((car, i) => template += car.getTemplate(i))
+  cars.forEach(car => template += car.Template)
   //NOTE Same thing
   // cars.forEach(function (car, i) { template += car.getTemplate()})
 
@@ -34,7 +34,9 @@ export default class CarsController {
       make: formData.make.value,
       model: formData.model.value,
       year: formData.year.value,
-      price: formData.price.value
+      price: formData.price.value,
+      imgUrl: formData.imgUrl.value,
+      description: formData.description.value
     }
 
     _carService.addCar(newCar)
@@ -43,8 +45,12 @@ export default class CarsController {
     console.log(event.target.make.value)
   }
 
-  delortCar(carIndex) {
-    _carService.delortCar(carIndex)
+  delortCar(carId) {
+    _carService.delortCar(carId)
+  }
+
+  bid(carId, carPrice){
+    _carService.bid(carId, carPrice)
   }
 
 }
