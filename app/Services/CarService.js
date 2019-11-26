@@ -3,30 +3,48 @@ import Car from "../Models/Car.js"
 
 // @ts-ignore
 let _carApi = axios.create({
-  baseURL: "https://bcw-sandbox.herokuapp.com/api/cars",
+  baseURL: "https://bcw-sandbox.herokuapp.com/api",
   timeout: 3000
 })
 
 class CarService {
-  delortCar(carIndex) {
-    _store.State.cars.splice(carIndex, 1)
+  bid(carId, carPrice) {
+
+    _carApi.put("/cars/"+carId, { price: +carPrice + 100}).then(res =>{
+      this.loadCars()
+    }).catch(err=>{
+      console.error(err)
+    })
+  }
+  delortCar(carId) {
+    // _carApi.delete("/cars/" + carId)
+    _carApi.delete(`/cars/${carId}`).then(res => {
+      console.log(res)
+      this.loadCars()
+    }).catch(err=>{
+      console.error(err)
+    })
+
   }
   addCar(carData) {
     //carData is a POJO 
     // new Car(data) is expecting data that represents a car and returns and instance of our model
-    let car = new Car(carData)
-    //car is now an instance of the Car class
-    let cars = _store.State.cars.map(c => new Car(c))
-    cars.push(car)
-    _store.commit("cars",cars)
+
+    _carApi.post("/cars", carData).then(res => {
+      this.loadCars()
+    }).catch(err=>{
+      console.error(err)
+    })
   }
 
-  loadCars(){
+  loadCars() {
     // make GET request to api, then save the data to our state
-    _carApi.get().then(res =>{
+    _carApi.get("/cars").then(res => {
       console.log(res)
       let cars = res.data.data.map(c => new Car(c))
       _store.commit("cars", cars)
+    }).catch(err=>{
+      console.error(err)
     })
 
   }
